@@ -1,23 +1,28 @@
-SWIFT_LINUX_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-DEVELOPMENT-SNAPSHOT-2020-04-07-a/swift-wasm-DEVELOPMENT-SNAPSHOT-2020-04-07-a-linux.tar.gz"
-WABT_LINUX_DOWNLOAD_URL="https://github.com/WebAssembly/wabt/releases/download/1.0.12/wabt-1.0.12-linux.tar.gz"
+SWIFT_LINUX_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-5.9-SNAPSHOT-2023-07-11-a/swift-wasm-5.9-SNAPSHOT-2023-07-11-a-ubuntu20.04_aarch64.tar.gz"
+WABT_LINUX_DOWNLOAD_URL="https://github.com/WebAssembly/wabt/releases/download/1.0.33/wabt-1.0.33-ubuntu.tar.gz"
 
 ifeq  ($(shell uname),Darwin)
-WABT_DOWNLOAD_URL="https://github.com/WebAssembly/wabt/releases/download/1.0.12/wabt-1.0.12-osx.tar.gz"
-SWIFT_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-DEVELOPMENT-SNAPSHOT-2020-04-07-a/swift-wasm-DEVELOPMENT-SNAPSHOT-2020-04-07-a-osx.tar.gz"
+WABT_DOWNLOAD_URL="https://github.com/WebAssembly/wabt/releases/download/1.0.33/wabt-1.0.33-macos-12.tar.gz"
+SWIFT_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-5.9-SNAPSHOT-2023-07-11-a/swift-wasm-5.9-SNAPSHOT-2023-07-11-a-macos_arm64.pkg"
 else ifeq ($(shell uname),Linux)
 WABT_DOWNLOAD_URL=$(WABT_LINUX_DOWNLOAD_URL)
 SWIFT_TOOLCHAIN_DOWNLOAD_URL=$(SWIFT_LINUX_TOOLCHAIN_DOWNLOAD_URL)
 endif
 
-LIBATOMIC_DOWNLOAD_URL="http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/x86_64/RPMS.classic/libatomic1-9.2.1-alt3.x86_64.rpm"
-LIBSTDCXX_DOWNLOAD_URL="http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/x86_64/RPMS.classic/libstdc%2B%2B6-9.2.1-alt3.x86_64.rpm"
+LIBATOMIC_DOWNLOAD_URL="http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/aarch64/RPMS.classic/libatomic1-13.1.1-alt1.aarch64.rpm"
+LIBSTDCXX_DOWNLOAD_URL="http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/aarch64/RPMS.classic/libstdc%2B%2B6-13.1.1-alt1.aarch64.rpm"
 
 prebuilt/wabt:
 	mkdir -p $@ && cd $@ && \
 		curl -L $(WABT_DOWNLOAD_URL) | tar xz --strip-components 1
 prebuilt/swift:
+ifeq ($(shell uname),Linux)
 	mkdir -p $@ && cd $@ && \
 		curl -L $(SWIFT_TOOLCHAIN_DOWNLOAD_URL) | tar xz --strip-components 1
+else
+	mkdir -p $@ && cd $@ && \
+		curl -L $(SWIFT_TOOLCHAIN_DOWNLOAD_URL) -o ./swifttoolchain.pkg && sudo installer -pkg ./swifttoolchain.pkg -target / && rm ./swifttoolchain.pkg
+endif
 prebuilt/linux/wabt: prebuilt/wabt
 ifeq ($(shell uname),Linux)
 	mkdir -p prebuilt/linux
