@@ -1,4 +1,4 @@
-SWIFT_LINUX_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-5.9-SNAPSHOT-2023-07-11-a/swift-wasm-5.9-SNAPSHOT-2023-07-11-a-ubuntu20.04_aarch64.tar.gz"
+SWIFT_LINUX_TOOLCHAIN_DOWNLOAD_URL="https://github.com/swiftwasm/swift/releases/download/swift-wasm-DEVELOPMENT-SNAPSHOT-2023-05-12-a/swift-wasm-DEVELOPMENT-SNAPSHOT-2023-05-12-a-ubuntu20.04_aarch64.tar.gz"
 WABT_LINUX_DOWNLOAD_URL="https://github.com/WebAssembly/wabt/releases/download/1.0.33/wabt-1.0.33-ubuntu.tar.gz"
 
 ifeq  ($(shell uname),Darwin)
